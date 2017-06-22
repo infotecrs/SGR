@@ -1,0 +1,2 @@
+ADM
+regsvr32 C:\Windows\SysWOW64\WavDest.dll

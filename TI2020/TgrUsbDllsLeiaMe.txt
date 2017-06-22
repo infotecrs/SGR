@@ -1,0 +1,18 @@
+A partir da versão 1.0.4.8 não há mais dll's específicas
+para Windows Xp e Windows Vista.  Somente uma única versão
+da TgrDsp.dll cobre ambos os sistemas.  Também a dll
+TgrSndVista.dll, anteriormente necessária para o Windows
+Vista, não é mais utilizada.
+
+Para utilizar com o Ti2020 copie a dll para o mesmo 
+subdiretório do aplicativo Ti2020.
+
+A partir da versão 1.0.4.96 a TgrDsp.dll está também
+compatível com o Windows 7, tanto 32 quanto 64 bits.
+
+A partir da versão 1.0.4.104 a TgrDsp.dll é também
+compatível com o windows 8, tanto 32 quanto 64 bits.
+
+No caso de Win 7 para 64 bits leia também o documento:
+		"Operação no Windows 7.pdf"
+

@@ -1,0 +1,61 @@
+select
+  XX.CODIGO,
+  IF(XX.NOME IS NULL, 'TOTAL GERAL',IF(XX.RESULTADO_NOME IS NULL,'SUBTOTAL', XX.NOME)) NOME,
+	IFNULL(SUM(XX.RECEBIDAS),0) RECEBIDAS,
+	SUM(XX.DISCADAS) DISCADAS,
+	SUM(XX.CONTATOS) CONTATOS,
+	SUM(XX.SUCESSOS) SUCESSOS,
+   (XX.PAUSAS) PAUSAS,
+	XX.RESULTADO_NOME
+FROM
+  (
+  SELECT
+    o.CODIGO,
+    o.NOME,
+    r.NOME AS RESULTADO_NOME,
+    (select sum(ligacoes_ok) 
+        from login_ativo_receptivo l 
+        where	modulo = "Receptivo"
+        and l.OPERADOR = o.codigo
+        and DATE(entrada) between '2016-08-10' and '2016-09-08'
+          ) as RECEBIDAS, 
+   CAST(COUNT(1) AS CHAR) AS DISCADAS,
+   CAST(SUM(IF(r.ECONTATO='SIM',1,0)) AS CHAR) AS CONTATOS,
+   CAST(SUM(IF(r.EVENDA='SIM',1,0)) AS CHAR) AS SUCESSOS ,
+   (
+	   SELECT
+			CAST(COUNT(1) AS CHAR) AS PAUSAS
+		FROM
+			pausas_realizadas p
+		WHERE
+		   DATE(p.DATA_HORA) BETWEEN '2016-08-10' AND '2016-09-08'
+			and p.OPERADOR = o.CODIGO
+		) AS PAUSAS
+  FROM
+    campanhas_clientes cc,
+    resultados r,
+    campanhas c,
+    operadores o
+  WHERE
+    r.CODIGO = cc.RESULTADO
+    AND c.CODIGO = cc.CAMPANHA
+    AND o.CODIGO = cc.OPERADOR_LIGACAO
+    AND cc.OPERADOR_LIGACAO > 0
+    AND DATE(cc.DT_RESULTADO) BETWEEN '2016-08-10' AND '2016-09-08'
+    AND o.CODIGO LIKE '%'
+    
+    AND cc.CAMPANHA LIKE '%'
+  GROUP BY
+    cc.OPERADOR_LIGACAO, cc.RESULTADO
+  ORDER BY
+     NOME
+  )XX
+GROUP BY
+	XX.NOME,
+  XX.RESULTADO_NOME
+WITH ROLLUP
+
+
+
+
+ 
